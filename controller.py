@@ -111,3 +111,35 @@ class Controller:
     def update_Deferred_to_model(self, deferred_id, customer_name, phone_num, address, price):
         self.model.update_Deferred(deferred_id, customer_name, phone_num, address, price)
         self.show_deferred()
+
+
+        #################pur
+
+        
+    def del_purch_show(self):
+        self.show_del_purch = Delpur(self)
+        self.show_del_purch.show()
+
+    
+
+
+    def add_Purchases_to_model(self,name_mat, count, com_name , buy_price ,sel_price , expir):
+        self.model.add_Purchases(name_mat, count, com_name, buy_price, sel_price, expir)
+
+    def get_Purchases_from_model(self):
+        return self.model.get_purchases()
+    
+    def del_Purchases_from_model(self,purchases_id):
+        self.model.del_Purchases(purchases_id)
+        self.show_Purchases()
+
+    def update_purch_show(self):
+        self.show_update_purch = Updatepurch(self)
+        self.show_update_purch.show()
+
+
+    def update_Purchases_to_model(self, purchases_id, name_mat, count, com_name , buy_price ,sel_price , expir):
+        self.model.update_Purchases(purchases_id, name_mat, count, com_name , buy_price ,sel_price , expir)
+        self.show_Purchases()
+
+
