@@ -8,15 +8,6 @@ def init_db():
     cursor.execute("PRAGMA foreign_keys = ON;")
 
     cursor.executescript('''
-    CREATE TABLE IF NOT EXISTS mat (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name_mat TEXT NOT NULL,
-        name_com TEXT NOT NULL,
-        type_mat TEXT NOT NULL,
-        count INTEGER NOT NULL,
-        expiry DATE NOT NULL,
-        Suitable_age INTEGER NOT NULL
-    );
 
     CREATE TABLE IF NOT EXISTS costumer (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -39,7 +30,9 @@ def init_db():
         count INTEGER NOT NULL,
         type TEXT NOT NULL,
         com_name TEXT NOT NULL,
-        buy_price INTEGER NOT NULL,
+        buy_price_for_set INTEGER NOT NULL,
+        buy_price_for_unit INTEGER NOT NULL,
+        sile_price_set INTEGER NOT NULL,
         sel_price INTEGER NOT NULL,
         expiry DATE NOT NULL
     );

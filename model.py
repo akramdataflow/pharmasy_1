@@ -6,43 +6,6 @@ class Model:
         self.conn = sqlite3.connect('data.db')  
         self.cursor = self.conn.cursor()
 
-    def add_mat(self, name_mat, name_com, type_mat, count, expiry, Suitable_age):
-        self.cursor.execute("INSERT INTO mat (name_mat, name_com, type_mat, count, expiry, Suitable_age) VALUES (?, ?, ?, ?, ?, ?)", (name_mat, name_com, type_mat, count, expiry, Suitable_age))
-        self.conn.commit()
-
-
-        
-    def get_mat(self):
-        self.cursor.execute('SELECT * FROM mat')
-        rows = self.cursor.fetchall()  # جلب جميع البيانات دفعة واحدة
-        mat_id = [col[0] for col in rows] 
-        name_mat = [col[1] for col in rows] 
-        name_com = [col[2] for col in rows]
-        type_mat = [col[3] for col in rows] 
-        count = [col[4] for col in rows]
-        expiry = [col[5] for col in rows]
-        Suitable_age = [col[6] for col in rows]
-        return mat_id, name_mat, name_com, type_mat, count, expiry, Suitable_age
-    
-    
-    def del_mat(self, mat_id):
-        self.cursor.execute("DELETE FROM mat WHERE id = ?", (mat_id,))
-        self.conn.commit()  
-
-    
-    def update_mat(self, mat_id, name_mat, name_com, type_mat, count, expiry, Suitable_age):
-        self.cursor.execute('''
-            UPDATE mat
-            SET name_mat = ?, name_com = ?, type_mat = ?, count = ? , expiry = ? ,  Suitable_age = ?
-            WHERE id = ?
-        ''', (name_mat, name_com, type_mat, count, expiry, Suitable_age, mat_id))
-        self.conn.commit()
-
-        
-
-
-
-
 
         
 #######################################################دفع مؤجل 
@@ -82,8 +45,8 @@ class Model:
              
         ####################لمشتريات
 
-    def add_Purchases(self, name_mat, count, type, com_name , buy_price ,sel_price , expiry ):
-        self.cursor.execute("INSERT INTO purchases (name_mat, count, type, com_name , buy_price ,sel_price , expiry) VALUES (?,?,?,?, ?, ?, ?)", (name_mat, count, type, com_name , buy_price ,sel_price , expiry ))
+    def add_Purchases(self, name_mat, count, type, com_name , buy_price_for_set, buy_price_for_unit ,sile_price_set ,sel_price , expiry ):
+        self.cursor.execute("INSERT INTO purchases (name_mat, count, type, com_name ,buy_price_for_set, buy_price_for_unit , sile_price_set,sel_price , expiry) VALUES (?,?,?,?, ?, ?, ?, ?, ?)", (name_mat, count, type, com_name , buy_price_for_set, buy_price_for_unit ,sile_price_set ,sel_price , expiry))
         self.conn.commit()
         
 
@@ -96,10 +59,12 @@ class Model:
         count = [str(col[2]) for col in rows] 
         type = [col[3] for col in rows]
         com_name = [col[4] for col in rows] 
-        buy_price = [col[5] for col in rows]
-        sel_price = [col[6] for col in rows]
-        expir = [col[7] for col in rows]
-        return pur_id, name_mat, count, type, com_name , buy_price ,sel_price , expir
+        buy_price_for_unit = [col[5] for col in rows] 
+        buy_price_for_set = [col[6] for col in rows]
+        sile_price_set = [col[7] for col in rows]
+        sel_price = [col[8] for col in rows]
+        expir = [col[9] for col in rows]
+        return pur_id, name_mat, count, type, com_name , buy_price_for_unit, buy_price_for_set,  sile_price_set, sel_price , expir 
         
         
     

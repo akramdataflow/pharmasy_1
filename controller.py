@@ -45,37 +45,6 @@ class Controller:
         self.show_Data_analysis_add = Data_analysis(self)
         self.show_Data_analysis_add.show()
 
-   
-   #################mat
-   
-   
-    def add_mat_to_model(self,name_mat, name_com, type_mat, count, expiry, Suitable_age):
-        self.model.add_mat(name_mat, name_com, type_mat, count, expiry, Suitable_age)
-
-    def del_mat_show(self):
-        self.show_del_mat = DelMat(self)
-        self.show_del_mat.show()
-
-    def update_mat_show(self):
-        self.show_update_mat = UpdateMat(self)
-        self.show_update_mat.show()
-
-
-    
-
-    def get_mat_from_model(self):
-        mat_id, name_mat, name_com, type_mat, count, expiry, Suitable_age = self.model.get_mat()
-        return mat_id, name_mat, name_com, type_mat, count, expiry, Suitable_age
-    
-    def del_mat_from_model(self, mat_id):
-        self.model.del_mat(mat_id)
-        self.show_materials()
-
-
-    def update_mat_to_model(self, mat_id, name_mat, name_com, type_mat, count, expiry, Suitable_age):
-        self.model.update_mat(mat_id, name_mat, name_com, type_mat, count, expiry, Suitable_age)
-        self.show_materials()
-
 
 
 
@@ -123,8 +92,8 @@ class Controller:
     
 
 
-    def add_Purchases_to_model(self,name_mat, count, type, com_name , buy_price ,sel_price , expir):
-        self.model.add_Purchases(name_mat, count, type, com_name, buy_price, sel_price, expir)
+    def add_Purchases_to_model(self,name_mat, count, type, com_name , buy_price_for_set, buy_price_for_unit ,sile_price_set ,sel_price , expiry):
+        self.model.add_Purchases(name_mat, count, type, com_name , buy_price_for_set, buy_price_for_unit ,sile_price_set ,sel_price , expiry)
 
     def get_Purchases_from_model(self):
         return self.model.get_purchases()
