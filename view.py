@@ -400,6 +400,7 @@ class Lists(QMainWindow):
 
         
         button2 = QPushButton()
+        button2.clicked.connect(self.controller.del_lis_show)
         button2.setStyleSheet("""
                     QPushButton{
                     border-radius: 4px;
@@ -434,6 +435,7 @@ class Lists(QMainWindow):
 
         
         button3 = QPushButton()
+        button3.clicked.connect(self.controller.show_deferred)
         button3.setStyleSheet("""
                     QPushButton{
                     border-radius: 4px;
@@ -2837,6 +2839,83 @@ class Updatepurch(QMainWindow):
         self.controller.update_Purchases_to_model(purch_id, name_mat, name_com, buy_price, count, expiry, sel_price)
 
 
+class Dellists(QMainWindow):
+    def __init__(self, controller):
+        super().__init__()
+        self.controller = controller
+
+        self.setWindowTitle("حذف المادة")
+        self.resize(300, 250)
+
+
+         
+        # فريم جديد
+        new_frame = QFrame(self)
+        new_frame.setStyleSheet("""background-color: #1A3654; border-radius: 4px;""")
+        new_frame.setGeometry(0, 0, self.width(), self.height())
+        self.setCentralWidget(new_frame)
+
+        new_layout = QGridLayout(new_frame)
+
+
+        label = QLabel('اكتب ترميز المنتج الذي تريد حذفه')
+        label.setStyleSheet('''
+            color: #FFF;
+            font-family: Inter;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+        ''')
+        new_layout.addWidget(label,0,1)
+
+        self.id_list = QLineEdit('')
+        self.id_list.setStyleSheet("""
+            border-radius: 4px;
+            background-color: #fff;
+        """)
+        new_layout.addWidget(self.id_list,0,0)
+
+        button1 = QPushButton()
+        button1.clicked.connect(self.send_id_list_to_controller)
+        button1.setStyleSheet("""
+                     QPushButton {
+                    border-radius: 4px;
+                    background: #50F296;
+                    color: #1A3654;
+                    font-family: Inter;
+                    font-size: 16px;
+                    font-style: normal;
+                    font-weight: 700;
+                    line-height: normal;
+                    
+                    background-repeat: no-repeat;
+                    background-position: center;}
+                              
+                    QPushButton:hover {
+                    background-color: lightblue; /* Hover color */
+                      
+                              
+                               }
+                              
+                    QPushButton:pressed {
+                    background-color: #92F7BD; /* Pressed color */
+                    color: white; /* Change text color on press */
+                        }
+                             
+                               """)
+        
+        icon = QIcon('./static/14.png')  # تحميل الأيقونة
+        button1.setIcon(icon)
+        button1.setIconSize(QSize(90, 36))
+        
+        new_layout.addWidget(button1,1,0,1,2)
+
+    def send_id_list_to_controller(self):
+        id_list = self.id_list.text()
+        self.controller.del_list_from_model(id_list)
+
+        print("sse")
 
 
 

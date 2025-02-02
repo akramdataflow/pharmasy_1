@@ -142,4 +142,14 @@ class Controller:
         self.model.update_Purchases(purchases_id, name_mat, count, com_name , buy_price ,sel_price , expir)
         self.show_Purchases()
 
+###################lists
+  
+    def del_lis_show(self):
+        self.show_del_lis = Dellists(self)
+        self.show_del_lis.show()
 
+
+        
+    def del_list_from_model(self,list_id):
+        self.model.del_list(list_id)
+        self.show_list()

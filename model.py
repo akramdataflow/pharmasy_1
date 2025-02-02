@@ -116,3 +116,11 @@ class Model:
             WHERE id = ?
         ''', (name_mat, count, com_name , buy_price ,sel_price , expir, purchases_id))
         self.conn.commit()  
+
+
+        ############list
+
+        
+    def del_list(self, list_id):
+        self.cursor.execute("DELETE FROM list WHERE id = ?", (list_id,))
+        self.conn.commit()
