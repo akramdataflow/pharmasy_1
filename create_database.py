@@ -37,6 +37,7 @@ def init_db():
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name_mat TEXT NOT NULL,
         count INTEGER NOT NULL,
+        type TEXT NOT NULL,
         com_name TEXT NOT NULL,
         buy_price INTEGER NOT NULL,
         sel_price INTEGER NOT NULL,
@@ -50,7 +51,7 @@ def init_db():
     );
 
     CREATE TABLE IF NOT EXISTS bill_detals (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id INTEGER ,
         mat_name TEXT NOT NULL,
         unit_price INTEGER NOT NULL,
         count INTEGER NOT NULL,

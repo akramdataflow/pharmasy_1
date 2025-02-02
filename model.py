@@ -82,8 +82,8 @@ class Model:
              
         ####################لمشتريات
 
-    def add_Purchases(self, name_mat, count, com_name , buy_price ,sel_price , expiry ):
-        self.cursor.execute("INSERT INTO purchases (name_mat, count, com_name , buy_price ,sel_price , expiry) VALUES (?,?,?,?, ?, ?)", (name_mat, count, com_name , buy_price ,sel_price , expiry ))
+    def add_Purchases(self, name_mat, count, type, com_name , buy_price ,sel_price , expiry ):
+        self.cursor.execute("INSERT INTO purchases (name_mat, count, type, com_name , buy_price ,sel_price , expiry) VALUES (?,?,?,?, ?, ?, ?)", (name_mat, count, type, com_name , buy_price ,sel_price , expiry ))
         self.conn.commit()
         
 
@@ -93,12 +93,13 @@ class Model:
         rows = self.cursor.fetchall()  
         pur_id = [col[0] for col in rows] 
         name_mat = [col[1] for col in rows] 
-        count = [str(col[2]) for col in rows]  
-        com_name = [col[3] for col in rows] 
-        buy_price = [col[4] for col in rows]
-        sel_price = [col[5] for col in rows]
-        expir = [col[6] for col in rows]
-        return pur_id, name_mat, count, com_name , buy_price ,sel_price , expir
+        count = [str(col[2]) for col in rows] 
+        type = [col[3] for col in rows]
+        com_name = [col[4] for col in rows] 
+        buy_price = [col[5] for col in rows]
+        sel_price = [col[6] for col in rows]
+        expir = [col[7] for col in rows]
+        return pur_id, name_mat, count, type, com_name , buy_price ,sel_price , expir
         
         
     
@@ -109,12 +110,12 @@ class Model:
 
 
 
-    def update_Purchases(self, purchases_id, name_mat, count, com_name , buy_price ,sel_price , expir):
+    def update_Purchases(self, purchases_id, name_mat, count, type, com_name , buy_price ,sel_price , expir):
         self.cursor.execute('''
             UPDATE purchases
-            SET name_mat = ?,  count = ?, com_name = ?, buy_price = ? , sel_price = ? , expiry = ?
+            SET name_mat = ?,  count = ?, type = ?, com_name = ?, buy_price = ? , sel_price = ? , expiry = ?
             WHERE id = ?
-        ''', (name_mat, count, com_name , buy_price ,sel_price , expir, purchases_id))
+        ''', (name_mat, count, type, com_name , buy_price ,sel_price , expir, purchases_id))
         self.conn.commit()  
 
 
@@ -124,3 +125,21 @@ class Model:
     def del_list(self, list_id):
         self.cursor.execute("DELETE FROM list WHERE id = ?", (list_id,))
         self.conn.commit()
+
+
+
+########################################## bill
+
+    def get_bill(self,):
+        self.cursor.execute('SELECT * FROM bills')
+        rows = self.cursor.fetchall()
+        bill_id = [col[0] for col in rows]
+        bill_amount =  [str(col[1]) for col in rows]
+        bill_date =  [str(col[2]) for col in rows]
+
+        return bill_id, bill_amount , bill_date
+    
+    
+
+
+    

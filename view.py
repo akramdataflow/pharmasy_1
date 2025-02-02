@@ -508,7 +508,6 @@ class Sales(QMainWindow):
 
         # فريم يحتوي على باقي العناصر مع Layout منفصل
         frame = QFrame()
-        layout2 = QGridLayout(frame)
         new_layout.addWidget(frame, 1, 0, 1, 2)
 
         # إضافة أيقونة في Layout1 (Layout العنوان)
@@ -521,13 +520,57 @@ class Sales(QMainWindow):
 
          #انشاء فريم لوضع البيانات الفريم الابيض السفلي
         frame = QFrame()
-        frame.setStyleSheet("""
-            border-radius: 4px;
-            background-color: #fff;
-        """)
-        frame.setFixedHeight(700)
+        data_frame_layout = QVBoxLayout(frame)
+        
+        # استرجاع البيانات من الموديل عبر الكونترولر
+        data_tabel = self.controller.get_bills_from_model()
+
+        total_amount = data_tabel[1]
+
+        total_amount = [float(price) for price in total_amount]
+
+        total_amount = sum(total_amount)
+        
+        # إنشاء جدول البيانات
+        self.table = QTableWidget()
+
+        #جعل حجم الجدول يتناسب مع حجم الشاشه 
+        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+
+        self.table.setAlternatingRowColors(True)
+        
+        # تعيين خلفية الجدول إلى اللون الأبيض
+        self.table.setStyleSheet("background-color: white;")
+
+        
+        # إعداد الجدول: تعيين الأعمدة
+        self.table.setColumnCount(3)  # عدد الأعمدة (المادة، العدد، اسم الشركة، سعر الشراء ,سعر البيع ,تاريخ الانتهاء)
+        self.table.setHorizontalHeaderLabels(['المبلغ',"التاريخ","الترميز"])  # العناوين
+        
+        # تعبئة الجدول بالبيانات
+        if data_tabel and len(data_tabel[0]) > 0:  # التأكد من وجود بيانات
+            row_count = len(data_tabel[0])  # افتراض أن جميع الأعمدة لها نفس الطول
+            self.table.setRowCount(row_count)
+        
+            # تعبئة البيانات في الجدول
+            for row in range(row_count):
+                self.table.setItem(row, 2, QTableWidgetItem(str(data_tabel[0][row])))  
+                self.table.setItem(row, 0, QTableWidgetItem(data_tabel[1][row]))  # إدخال الاسم
+                self.table.setItem(row, 1, QTableWidgetItem(data_tabel[2][row]))
+              
+        
+            # تعديل حجم الأعمدة لتناسب المحتوى بعد تعبئة الجدول
+            self.table.resizeColumnsToContents()
+        else:
+            self.table.setRowCount(0)
+        
+        # إضافة الجدول إلى التخطيط داخل الفريم
+        data_frame_layout.addWidget(self.table)
+        
+        # تعيين التخطيط للفريم
+        frame.setLayout(data_frame_layout)
         new_layout.addWidget(frame,2,0)
-        frame.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        
 
         
         #انشاء فريم للحفض الفريم الابيض الجانبي
@@ -600,16 +643,15 @@ class Sales(QMainWindow):
         button3.setIcon(icon)
         button3.setIconSize(QSize(90, 36))
         
-        save_frame_layout.addWidget(button3,1,0)
+        save_frame_layout.addWidget(button3,2,0)
         
 
-
-        total_input = QLineEdit()
-        total_input.setStyleSheet("""
-            border-radius: 4px;
-            background-color: #fff;
-        """)
-        save_frame_layout.addWidget(total_input, 2, 0)
+        frame_total = QFrame()
+        frame_total.setStyleSheet('''background-color: #FFF;''')
+        frame_total_layout = QVBoxLayout(frame_total)
+        label = QLabel(f'المجموع : {total_amount}')
+        frame_total_layout.addWidget(label)
+        save_frame_layout.addWidget(frame_total, 1, 0)
 
 
 
@@ -700,8 +742,7 @@ class Purchases(QMainWindow):
 
         save_frame_layout.addWidget(self.cuont, 1, 0)
 
-
-        label = QLabel("اسم الشركة")
+        label = QLabel("النوع")
         label.setStyleSheet('''
             color: #FFF;
             font-family: Inter;
@@ -714,16 +755,16 @@ class Purchases(QMainWindow):
 
         
 
-        self.com_name = QLineEdit("")
-        self.com_name.setStyleSheet("""
+        self.type = QLineEdit("")
+        self.type.setStyleSheet("""
             border-radius: 4px;
             background-color: #fff;
         """)
 
-        save_frame_layout.addWidget(self.com_name, 2, 0)
+        save_frame_layout.addWidget(self.type, 2, 0)
 
 
-        label = QLabel("سعر الشراء")
+        label = QLabel("اسم الشركة")
         label.setStyleSheet('''
             color: #FFF;
             font-family: Inter;
@@ -736,17 +777,16 @@ class Purchases(QMainWindow):
 
         
 
-        self.buy_price = QLineEdit("")
-        self.buy_price.setStyleSheet("""
+        self.com_name = QLineEdit("")
+        self.com_name.setStyleSheet("""
             border-radius: 4px;
             background-color: #fff;
         """)
 
-        save_frame_layout.addWidget(self.buy_price, 3, 0)
+        save_frame_layout.addWidget(self.com_name, 3, 0)
 
 
-
-        label = QLabel("سعر البيع")
+        label = QLabel("سعر الشراء")
         label.setStyleSheet('''
             color: #FFF;
             font-family: Inter;
@@ -759,17 +799,17 @@ class Purchases(QMainWindow):
 
         
 
-        self.sile_price = QLineEdit("")
-        self.sile_price.setStyleSheet("""
+        self.buy_price = QLineEdit("")
+        self.buy_price.setStyleSheet("""
             border-radius: 4px;
             background-color: #fff;
         """)
 
-        save_frame_layout.addWidget(self.sile_price, 4, 0)
+        save_frame_layout.addWidget(self.buy_price, 4, 0)
 
 
 
-        label = QLabel("تاريخ الانتهاء")
+        label = QLabel("سعر البيع")
         label.setStyleSheet('''
             color: #FFF;
             font-family: Inter;
@@ -782,13 +822,36 @@ class Purchases(QMainWindow):
 
         
 
+        self.sile_price = QLineEdit("")
+        self.sile_price.setStyleSheet("""
+            border-radius: 4px;
+            background-color: #fff;
+        """)
+
+        save_frame_layout.addWidget(self.sile_price, 5, 0)
+
+
+
+        label = QLabel("تاريخ الانتهاء")
+        label.setStyleSheet('''
+            color: #FFF;
+            font-family: Inter;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+        ''')
+        save_frame_layout.addWidget(label, 6, 1)
+
+        
+
         self.expiry = QDateEdit()
         self.expiry.setStyleSheet("""
             border-radius: 4px;
             background-color: #fff;
         """)
 
-        save_frame_layout.addWidget(self.expiry, 5, 0)
+        save_frame_layout.addWidget(self.expiry, 6, 0)
 
 
          #انشاء فريم لوضع البيانات الفريم الابيض السفلي
@@ -811,8 +874,8 @@ class Purchases(QMainWindow):
 
         
         # إعداد الجدول: تعيين الأعمدة
-        self.table.setColumnCount(7)  # عدد الأعمدة (المادة، العدد، اسم الشركة، سعر الشراء ,سعر البيع ,تاريخ الانتهاء)
-        self.table.setHorizontalHeaderLabels(['المادة،', ' العدد،', 'اسم الشركة ', ' سعر الشراء ', "سعر البيع ", "تاريخ الانتهاء",'الترميز'])  # العناوين
+        self.table.setColumnCount(8)  # عدد الأعمدة (المادة، العدد، اسم الشركة، سعر الشراء ,سعر البيع ,تاريخ الانتهاء)
+        self.table.setHorizontalHeaderLabels(['المادة،', ' العدد،', 'النوع', 'اسم الشركة ', ' سعر الشراء ', "سعر البيع ", "تاريخ الانتهاء",'الترميز'])  # العناوين
         
         # تعبئة الجدول بالبيانات
         if data_tabel and len(data_tabel[0]) > 0:  # التأكد من وجود بيانات
@@ -821,13 +884,14 @@ class Purchases(QMainWindow):
         
             # تعبئة البيانات في الجدول
             for row in range(row_count):
-                self.table.setItem(row, 6, QTableWidgetItem(str(data_tabel[0][row])))  
+                self.table.setItem(row, 7, QTableWidgetItem(str(data_tabel[0][row])))  
                 self.table.setItem(row, 0, QTableWidgetItem(data_tabel[1][row]))  # إدخال الاسم
-                self.table.setItem(row, 1, QTableWidgetItem(data_tabel[2][row]))  # إدخال اسم الشركة
-                self.table.setItem(row, 2, QTableWidgetItem(str(data_tabel[3][row])))  # إدخال النوع
-                self.table.setItem(row, 3, QTableWidgetItem(str(data_tabel[4][row])))  # إدخال العدد 
-                self.table.setItem(row, 4, QTableWidgetItem(str(data_tabel[5][row]))) #الانتهاء
-                self.table.setItem(row, 5, QTableWidgetItem(str(data_tabel[6][row]))) # العمر المناسب
+                self.table.setItem(row, 1, QTableWidgetItem(data_tabel[2][row]))
+                self.table.setItem(row, 2, QTableWidgetItem(data_tabel[3][row]))   # إدخال اسم الشركة
+                self.table.setItem(row, 3, QTableWidgetItem(str(data_tabel[4][row])))  # إدخال النوع
+                self.table.setItem(row, 4, QTableWidgetItem(str(data_tabel[5][row])))  # إدخال العدد 
+                self.table.setItem(row, 5, QTableWidgetItem(str(data_tabel[6][row]))) #الانتهاء
+                self.table.setItem(row, 65, QTableWidgetItem(str(data_tabel[7][row]))) # العمر المناسب
         
             # تعديل حجم الأعمدة لتناسب المحتوى بعد تعبئة الجدول
             self.table.resizeColumnsToContents()
@@ -981,6 +1045,7 @@ class Purchases(QMainWindow):
         # الحصول على البيانات من الواجهة
         name_mat = self.mat_name.text()
         count = self.cuont.text()
+        type = self.type.text()
         com_name = self.com_name.text()
         buy_price = self.buy_price.text()
         sel_price = self.sile_price.text()
@@ -988,7 +1053,7 @@ class Purchases(QMainWindow):
         
 
         # إرسال البيانات إلى الكونترولر لإضافتها للنموذج
-        self.controller.add_Purchases_to_model(name_mat, count, com_name, buy_price, sel_price, expiry)
+        self.controller.add_Purchases_to_model(name_mat, count, type, com_name, buy_price, sel_price, expiry)
 
         # تحديث الجدول بعد الحفظ
         self.refresh_table()
@@ -1006,13 +1071,14 @@ class Purchases(QMainWindow):
             self.table.setRowCount(row_count)
 
             for row in range(row_count):
-                self.table.setItem(row, 6, QTableWidgetItem(str(data_table[0][row])))  
+                self.table.setItem(row, 7, QTableWidgetItem(str(data_table[0][row])))  
                 self.table.setItem(row, 0, QTableWidgetItem(data_table[1][row]))  
                 self.table.setItem(row, 1, QTableWidgetItem(data_table[2][row]))  
-                self.table.setItem(row, 2, QTableWidgetItem(str(data_table[3][row]))) 
-                self.table.setItem(row, 3, QTableWidgetItem(str(data_table[4][row])))  
-                self.table.setItem(row, 4, QTableWidgetItem(str(data_table[5][row])))
+                self.table.setItem(row, 2, QTableWidgetItem(data_table[3][row])) 
+                self.table.setItem(row, 3, QTableWidgetItem(str(data_table[4][row]))) 
+                self.table.setItem(row, 4, QTableWidgetItem(str(data_table[5][row])))  
                 self.table.setItem(row, 5, QTableWidgetItem(str(data_table[6][row])))
+                self.table.setItem(row, 6, QTableWidgetItem(str(data_table[7][row])))
 
 
 
@@ -2649,7 +2715,7 @@ class Updatepurch(QMainWindow):
         ''')
         new_layout.addWidget(label,0,1)
 
-        self.purch_id = QLineEdit('')
+        self.purch_id = QLineEdit()
         self.purch_id.setStyleSheet("""
             border-radius: 4px;
             background-color: #fff;
@@ -2668,7 +2734,7 @@ class Updatepurch(QMainWindow):
         ''')
         new_layout.addWidget(label,1,1)
 
-        self.name_mat = QLineEdit('')
+        self.name_mat = QLineEdit()
         self.name_mat.setStyleSheet("""
             border-radius: 4px;
             background-color: #fff;
@@ -2676,7 +2742,7 @@ class Updatepurch(QMainWindow):
         new_layout.addWidget(self.name_mat,1,0)
         
 
-        label = QLabel('اسم الشركة  ')
+        label = QLabel('اسم الشركة')
         label.setStyleSheet('''
             color: #FFF;
             font-family: Inter;
@@ -2689,7 +2755,7 @@ class Updatepurch(QMainWindow):
 
 
 
-        self.name_com = QLineEdit('')
+        self.name_com = QLineEdit()
         self.name_com.setStyleSheet("""
             border-radius: 4px;
             background-color: #fff;
@@ -2697,7 +2763,7 @@ class Updatepurch(QMainWindow):
         new_layout.addWidget(self.name_com,2,0)
 
 
-        label = QLabel('النوع ')
+        label = QLabel('سعر الشراء')
         label.setStyleSheet('''
             color: #FFF;
             font-family: Inter;
@@ -2710,7 +2776,7 @@ class Updatepurch(QMainWindow):
 
 
 
-        self.buy_price = QLineEdit('')
+        self.buy_price = QLineEdit()
         self.buy_price.setStyleSheet("""
             border-radius: 4px;
             background-color: #fff;
@@ -2732,12 +2798,35 @@ class Updatepurch(QMainWindow):
 
 
 
-        self.count = QLineEdit('')
+        self.count = QLineEdit()
         self.count.setStyleSheet("""
             border-radius: 4px;
             background-color: #fff;
         """)
         new_layout.addWidget(self.count,4,0)
+
+
+
+
+        label = QLabel('النوع')
+        label.setStyleSheet('''
+            color: #FFF;
+            font-family: Inter;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+        ''')
+        new_layout.addWidget(label,5,1)
+
+
+
+        self.type = QLineEdit()
+        self.type.setStyleSheet("""
+            border-radius: 4px;
+            background-color: #fff;
+        """)
+        new_layout.addWidget(self.type,5,0)
         
 
 
@@ -2752,7 +2841,7 @@ class Updatepurch(QMainWindow):
             font-weight: 700;
             line-height: normal;
         ''')
-        new_layout.addWidget(label,6,1)
+        new_layout.addWidget(label,7,1)
 
         self.expiry = QDateEdit()
         # تعيين التاريخ الافتراضي ليكون تاريخ اليوم
@@ -2766,7 +2855,7 @@ class Updatepurch(QMainWindow):
             border-radius: 4px;
             background-color: #fff;
         """)
-        new_layout.addWidget(self.expiry,6,0)
+        new_layout.addWidget(self.expiry,7,0)
 
 
 
@@ -2780,16 +2869,16 @@ class Updatepurch(QMainWindow):
             font-weight: 700;
             line-height: normal;
         ''')
-        new_layout.addWidget(label,5,1)
+        new_layout.addWidget(label,6,1)
 
 
 
-        self.sel_price = QLineEdit('')
+        self.sel_price = QLineEdit()
         self.sel_price.setStyleSheet("""
             border-radius: 4px;
             background-color: #fff;
         """)
-        new_layout.addWidget(self.sel_price,5,0)
+        new_layout.addWidget(self.sel_price,6,0)
 
  
 
@@ -2826,7 +2915,7 @@ class Updatepurch(QMainWindow):
         button.setIcon(icon)
         button.setIconSize(QSize(90, 36))
 
-        new_layout.addWidget(button,7,0,1,2)
+        new_layout.addWidget(button,8,0,1,2)
 
     def send_update_purch_to_controller(self):
         purch_id = self.purch_id.text()
@@ -2836,7 +2925,8 @@ class Updatepurch(QMainWindow):
         count = self.count.text()
         expiry = self.expiry.date().toString('yyyy-MM-dd')
         sel_price = self.sel_price.text()
-        self.controller.update_Purchases_to_model(purch_id, name_mat, name_com, buy_price, count, expiry, sel_price)
+        type = self.type.text()
+        self.controller.update_Purchases_to_model(purch_id, name_mat, count, type, name_com , buy_price ,sel_price , expiry)
 
 
 class Dellists(QMainWindow):

@@ -123,8 +123,8 @@ class Controller:
     
 
 
-    def add_Purchases_to_model(self,name_mat, count, com_name , buy_price ,sel_price , expir):
-        self.model.add_Purchases(name_mat, count, com_name, buy_price, sel_price, expir)
+    def add_Purchases_to_model(self,name_mat, count, type, com_name , buy_price ,sel_price , expir):
+        self.model.add_Purchases(name_mat, count, type, com_name, buy_price, sel_price, expir)
 
     def get_Purchases_from_model(self):
         return self.model.get_purchases()
@@ -138,8 +138,8 @@ class Controller:
         self.show_update_purch.show()
 
 
-    def update_Purchases_to_model(self, purchases_id, name_mat, count, com_name , buy_price ,sel_price , expir):
-        self.model.update_Purchases(purchases_id, name_mat, count, com_name , buy_price ,sel_price , expir)
+    def update_Purchases_to_model(self, purchases_id, name_mat, count, type, com_name , buy_price ,sel_price , expir):
+        self.model.update_Purchases(purchases_id, name_mat, count, type, com_name , buy_price ,sel_price , expir)
         self.show_Purchases()
 
 ###################lists
@@ -153,3 +153,11 @@ class Controller:
     def del_list_from_model(self,list_id):
         self.model.del_list(list_id)
         self.show_list()
+
+
+################# bills  
+
+
+    def get_bills_from_model(self):
+        return self.model.get_bill()
+        
