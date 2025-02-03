@@ -129,4 +129,9 @@ class Controller:
 
     def get_bills_from_model(self):
         return self.model.get_bill()
-        
+    
+
+############### bill_detales
+
+    def get_bill_detales_from_model(self):
+        return self.model.get_bill_detales()

@@ -219,7 +219,6 @@ class Lists(QMainWindow):
 
         # فريم يحتوي على باقي العناصر مع Layout منفصل
         frame = QFrame()
-        layout2 = QGridLayout(frame)
         new_layout.addWidget(frame, 1, 0, 1, 2)
 
         # إضافة أيقونة في Layout1 (Layout العنوان)
@@ -233,13 +232,53 @@ class Lists(QMainWindow):
         
         #انشاء فريم لوضع البيانات الفريم الابيض السفلي
         frame = QFrame()
-        frame.setStyleSheet("""
-            border-radius: 4px;
-            background-color: #fff;
-        """)
-        frame.setFixedHeight(700)
-        new_layout.addWidget(frame,1,0)
-        frame.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        data_frame_layout = QVBoxLayout(frame)
+        
+        # استرجاع البيانات من الموديل عبر الكونترولر
+        data_tabel = self.controller.get_bill_detales_from_model()
+        
+        # إنشاء جدول البيانات
+        self.table = QTableWidget()
+
+        #جعل حجم الجدول يتناسب مع حجم الشاشه 
+        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+
+        self.table.setAlternatingRowColors(True)
+        
+        # تعيين خلفية الجدول إلى اللون الأبيض
+        self.table.setStyleSheet("background-color: white;")
+
+        
+        # إعداد الجدول: تعيين الأعمدة
+        self.table.setColumnCount(4)  # عدد الأعمدة (المادة، العدد، اسم الشركة، سعر الشراء ,سعر البيع ,تاريخ الانتهاء)
+        self.table.setHorizontalHeaderLabels(['المادة', ' سعر القطعة', 'العدد', 'السعر الكلي'])  # العناوين
+        
+        # تعبئة الجدول بالبيانات
+        if data_tabel and len(data_tabel[0]) > 0:  # التأكد من وجود بيانات
+            row_count = len(data_tabel[0])  # افتراض أن جميع الأعمدة لها نفس الطول
+            self.table.setRowCount(row_count)
+        
+            # تعبئة البيانات في الجدول
+            for row in range(row_count):
+                self.table.setItem(row, 0, QTableWidgetItem(data_tabel[0][row]))  # إدخال الاسم
+                self.table.setItem(row, 1, QTableWidgetItem(str(data_tabel[1][row])))
+                self.table.setItem(row, 2, QTableWidgetItem(str(data_tabel[2][row])))   # إدخال اسم الشركة
+                self.table.setItem(row, 3, QTableWidgetItem(str(data_tabel[3][row])))  # إدخال النوع
+
+        
+            # تعديل حجم الأعمدة لتناسب المحتوى بعد تعبئة الجدول
+            self.table.resizeColumnsToContents()
+        else:
+            self.table.setRowCount(0)
+        
+        # إضافة الجدول إلى التخطيط داخل الفريم
+        data_frame_layout.addWidget(self.table)
+        
+        # تعيين التخطيط للفريم
+        frame.setLayout(data_frame_layout)
+        
+        # إضافة الفريم إلى التخطيط الخارجي
+        new_layout.addWidget(frame, 1, 0)
 
 
         
@@ -250,6 +289,7 @@ class Lists(QMainWindow):
             background-color: #1A3654;
         """)
         save_frame_layout = QGridLayout(save_frame)
+        new_layout.addWidget(save_frame,1,1)
         # save_frame.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         
         
@@ -269,77 +309,136 @@ class Lists(QMainWindow):
         #فريم الابيض الزغير 
         
 
-        frame_whit = QFrame()
-        frame_whit.setStyleSheet("""
-         border-radius:4px;
-         background-color: #fff;
-       """)
-        frame_whit.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-       
-        frame_whit.setFixedHeight(50)  
-        save_frame_layout.addWidget(frame_whit, 0, 0)
-        
+        bill1 = QPushButton()
+        bill1.setStyleSheet("""
+                QPushButton {
+                    border-radius: 4px;
+                    background: #50F296;
+                    color: #1A3654;
+                    font-family: Inter;
+                    font-size: 16px;
+                    font-style: normal;
+                    font-weight: 700;
+                    line-height: normal;
+                    background-repeat: no-repeat;
+                    background-position: center;}
+                              
+                    QPushButton:hover {
+                    background-color: lightblue; /* Hover color */
+                      
+                              
+                               }
+                              
+                    QPushButton:pressed {
+                    background-color: #92F7BD; /* Pressed color */
+                    color: white; /* Change text color on press */
+                        }           
+                               """)
+        bill1.setFixedHeight(70)
+        save_frame_layout.addWidget(bill1,0,0)
+
+        icon = QIcon('./static/Group 32.png')  # تحميل الأيقونة
+        bill1.setIcon(icon)
+        bill1.setIconSize(QSize(229, 62))
+
+
+        bill2 = QPushButton()
+        bill2.setStyleSheet("""
+                QPushButton {
+                    border-radius: 4px;
+                    background: #50F296;
+                    color: #1A3654;
+                    font-family: Inter;
+                    font-size: 16px;
+                    font-style: normal;
+                    font-weight: 700;
+                    line-height: normal;
+                    background-repeat: no-repeat;
+                    background-position: center;}
+                              
+                    QPushButton:hover {
+                    background-color: lightblue; /* Hover color */
+                      
+                              
+                               }
+                              
+                    QPushButton:pressed {
+                    background-color: #92F7BD; /* Pressed color */
+                    color: white; /* Change text color on press */
+                        }           
+                               """)
+        bill2.setFixedHeight(70)
+        save_frame_layout.addWidget(bill2,0,1) 
+        icon = QIcon('./static/Group 33.png')  # تحميل الأيقونة
+        bill2.setIcon(icon)
+        bill2.setIconSize(QSize(229, 62))   
+
+        bill3 = QPushButton()
+        bill3.setStyleSheet("""
+                QPushButton {
+                    border-radius: 4px;
+                    background: #50F296;
+                    color: #1A3654;
+                    font-family: Inter;
+                    font-size: 16px;
+                    font-style: normal;
+                    font-weight: 700;
+                    line-height: normal;
+                    background-repeat: no-repeat;
+                    background-position: center;}
+                              
+                    QPushButton:hover {
+                    background-color: lightblue; /* Hover color */
+                      
+                              
+                               }
+                              
+                    QPushButton:pressed {
+                    background-color: #92F7BD; /* Pressed color */
+                    color: white; /* Change text color on press */
+                        }           
+                               """)
+        bill3.setFixedHeight(70)
+        save_frame_layout.addWidget(bill3,1,0) 
+        icon = QIcon('./static/Group 34.png')  # تحميل الأيقونة
+        bill3.setIcon(icon)
+        bill3.setIconSize(QSize(229, 62))
 
 
 
-        frame_whit2 = QFrame()
-        frame_whit2.setStyleSheet("""
-         border-radius: 4px;
-         background-color: #fff;
-     """)
-        frame_whit2.setFixedHeight(50)
-        frame_whit2.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed) 
-        save_frame_layout.addWidget(frame_whit2, 0, 1)
-
-        frame_whit3 = QFrame()
-        frame_whit3.setStyleSheet("""
-         border-radius: 4px;
-         background-color: #fff;
-       """)
-        frame_whit3.setFixedHeight(50)
-        frame_whit3.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)  
-        save_frame_layout.addWidget(frame_whit3, 0, 2)
 
 
-        frame_whit4 = QFrame()
-        frame_whit4.setStyleSheet("""
-        border-radius: 4px;
-        background-color: #fff;
-       """)
-        frame_whit4.setFixedHeight(50)
-        frame_whit4.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)  
-        save_frame_layout.addWidget(frame_whit4, 0, 3)
+        bill4 = QPushButton()
+        bill4.setStyleSheet("""
+                QPushButton {
+                    border-radius: 4px;
+                    background: #50F296;
+                    color: #1A3654;
+                    font-family: Inter;
+                    font-size: 16px;
+                    font-style: normal;
+                    font-weight: 700;
+                    line-height: normal;
+                    background-repeat: no-repeat;
+                    background-position: center;}
+                              
+                    QPushButton:hover {
+                    background-color: lightblue; /* Hover color */
+                      
+                              
+                               }
+                              
+                    QPushButton:pressed {
+                    background-color: #92F7BD; /* Pressed color */
+                    color: white; /* Change text color on press */
+                        }           
+                               """)
+        bill4.setFixedHeight(70)
+        save_frame_layout.addWidget(bill4,1,1)  
 
-        
-
-
-
-
-
-
-        label = QLabel("")
-        label.setStyleSheet('''
-             background-color: #1A3654;
-            font-family: Inter;
-            font-size:20px;
-            font-style: normal;
-            font-weight: 700;
-            line-height: normal;
-        ''')
-
-        save_frame_layout.addWidget(label,0,0)
-        # 1,1 تعني العمود الثاني والصف الثاني
-
-        # 2,1 تعني انهو ياخذ صفين الثاني والثالث وياخذ عمود واحد
-        new_layout.addWidget(save_frame,1,1)
-
-        
-
-
-
-
-
-
+        icon = QIcon('./static/Group 35.png')  # تحميل الأيقونة
+        bill4.setIcon(icon)
+        bill4.setIconSize(QSize(229, 62))  
 
 
 
@@ -374,7 +473,7 @@ class Lists(QMainWindow):
         button1.setIcon(icon)
         button1.setIconSize(QSize(229, 62))
        
-        save_frame_layout.addWidget(button1,1,0)
+        save_frame_layout.addWidget(button1,2,0,1,2)
 
 
 
@@ -409,7 +508,7 @@ class Lists(QMainWindow):
         button2.setIcon(icon)
         button2.setIconSize(QSize(90, 36))
         
-        save_frame_layout.addWidget(button2,2,0)
+        save_frame_layout.addWidget(button2,3,0,1,2)
         
         
 
@@ -444,7 +543,7 @@ class Lists(QMainWindow):
         button3.setIcon(icon)
         button3.setIconSize(QSize(90, 36))
         
-        save_frame_layout.addWidget(button3,3,0)
+        save_frame_layout.addWidget(button3,4,0,1,2)
        
 
 
@@ -580,6 +679,10 @@ class Sales(QMainWindow):
         new_layout.addWidget(save_frame,1,0)
 
 
+        label = QLabel(f'المجموع : {total_amount}')
+        label.setStyleSheet('''background-color: #FFF;''')
+        label.setFixedHeight(50)
+        new_layout.addWidget(label, 3, 0)
 
         # البحث في فريم الجانبي لل (save frame layout)
 
@@ -594,19 +697,51 @@ class Sales(QMainWindow):
         ''')
         save_frame_layout.addWidget(label_history, 0, 1)
 
-        history_input = QLineEdit()
-        history_input.setStyleSheet("""
+        # إضافة QDateEdit جديد لتحديد التاريخ للفلتر
+        history_input_filter = QDateEdit()
+        history_input_filter.setDate(QDate.currentDate())
+        history_input_filter.setStyleSheet("""
             border-radius: 4px;
             background-color: #fff;
         """)
-        save_frame_layout.addWidget(history_input, 0, 0)
+        history_input_filter.setDisplayFormat("dd/MM/yyyy")  # تعيين تنسيق التاريخ هنا
+        save_frame_layout.addWidget(history_input_filter, 1, 0)
+
+        # إضافة زر لتطبيق الفلتر
+        filter_button = QPushButton("تصفية")
+        filter_button.setStyleSheet("""
+            background-color: #50F296;
+            border-radius: 4px;
+            color: #000000;
+        """)
+        save_frame_layout.addWidget(filter_button, 1, 1)
+
+        # دالة لتصفية البيانات حسب التاريخ
+        def filter_data_by_date():
+            selected_date = history_input_filter.date().toString("dd/MM/yyyy")
+
+            # تصفية البيانات باستخدام التاريخ المحدد
+            filtered_data = []
+            for row in range(len(data_tabel[0])):
+                if data_tabel[2][row] == selected_date:  # assuming date is in column 2 (index 2)
+                    filtered_data.append([data_tabel[0][row], data_tabel[1][row], data_tabel[2][row]])
+
+            # تحديث الجدول بالبيانات المفلترة
+            self.table.setRowCount(len(filtered_data))
+            for row_index, row_data in enumerate(filtered_data):
+                self.table.setItem(row_index, 2, QTableWidgetItem(str(row_data[0])))  
+                self.table.setItem(row_index, 0, QTableWidgetItem(row_data[1]))  
+                self.table.setItem(row_index, 1, QTableWidgetItem(row_data[2]))
+
+            self.table.resizeColumnsToContents()
+
+        # ربط الزر بوظيفة الفلتر
+        filter_button.clicked.connect(filter_data_by_date)
+
         
 
         
-        label = QLabel(f'المجموع : {total_amount}')
-        label.setStyleSheet('''background-color: #FFF;''')
-        label.setFixedHeight(50)
-        new_layout.addWidget(label, 3, 0)
+
 
 
 

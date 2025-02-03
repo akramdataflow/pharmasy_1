@@ -104,7 +104,19 @@ class Model:
 
         return bill_id, bill_amount , bill_date
     
+
+
+############################################bill_detales
     
+    def get_bill_detales(self):
+        self.cursor.execute('SELECT * FROM bill_detals')
+        rows = self.cursor.fetchall()
+        mat_name =  [col[1] for col in rows]
+        unit_price =  [col[2] for col in rows]
+        count = [col[3] for col in rows]
+        totla_price = [col[4] for col in rows]
+
+        return  mat_name, unit_price, count, totla_price
 
 
     
